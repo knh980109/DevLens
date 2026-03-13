@@ -1,0 +1,66 @@
+@use 'variables' as *;
+
+:root {
+  --bg: #{$light-bg};
+  --surface: #{$light-surface};
+  --border: #{$light-border};
+  --text: #{$light-text};
+  --text-muted: #{$light-text-muted};
+  --primary: #{$primary};
+  --primary-light: #{$primary-light};
+  --success: #{$success};
+  --warning: #{$warning};
+  --danger: #{$danger};
+  --info: #{$info};
+  --radius: #{$radius};
+  --transition: #{$transition};
+}
+
+[data-theme='dark'] {
+  --bg: #{$dark-bg};
+  --surface: #{$dark-surface};
+  --border: #{$dark-border};
+  --text: #{$dark-text};
+  --text-muted: #{$dark-text-muted};
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: background-color var(--transition), border-color var(--transition);
+}
+
+// fade-slide transition
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}

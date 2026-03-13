@@ -1,0 +1,6 @@
+@DevLens.Api_HostAddress = http://localhost:5098
+
+GET {{DevLens.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
