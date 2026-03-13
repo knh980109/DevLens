@@ -162,11 +162,10 @@ DevLens/
 | 레이어 | 전략 |
 |--------|------|
 | Pinia Store | try/catch → `console.warn` 로깅 + Mock 데이터 fallback |
-| 에러 메시지 | `store.errors[key]` 에 상태 문자열 저장, 필요시 뷰에서 표시 가능 |
+| 에러 메시지 | `store.errors[key]` 에 상태 문자열 저장, 4개 뷰에서 `.api-error-banner`로 표시 |
 | 로깅 포맷 | `[DevLens] {action} API 실패 — Mock 데이터로 fallback. ([STATUS] message)` |
-| 사용자 경험 | 에러 발생 시 Mock 데이터로 자동 전환 → 빈 화면 없음 |
+| 사용자 경험 | 에러 발생 시 Mock 데이터로 자동 전환 + 상단 배너로 상태 안내 → 빈 화면 없음 |
 
 ### 에러 처리 미포함 범위
-- 실제 서버 오류 알림 UI (토스트/배너): 데모 버전 범위 제외
 - 재시도(Retry) 로직: 백엔드가 로컬 전용이므로 미구현
 - 글로벌 에러 바운더리: Vue `onErrorCaptured` 미적용 (추후 구현 예정)
