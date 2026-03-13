@@ -2,7 +2,12 @@
   <header class="app-header">
     <div class="header-inner">
       <div class="logo">
-        <img src="@/assets/logo.svg" alt="DevLens" class="logo-img" />
+        <svg class="logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="34" height="34">
+          <rect width="44" height="44" rx="10" fill="#00965E"/>
+          <circle cx="19" cy="19" r="9" fill="none" stroke="white" stroke-width="3"/>
+          <line x1="25.5" y1="25.5" x2="33" y2="33" stroke="white" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="16" cy="15" r="2.5" fill="rgba(255,255,255,0.35)"/>
+        </svg>
         <div class="logo-texts">
           <span class="logo-text">DevLens</span>
           <span class="logo-sub">GC메디아이 코드 리뷰 대시보드</span>

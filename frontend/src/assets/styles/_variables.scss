@@ -1,23 +1,24 @@
-// GC메디아이 브랜드 컬러
+// GC메디아이 포인트 컬러
 $primary: #00965E;
-$primary-light: #4DB87E;
-$primary-dark: #007A4C;
+$primary-light: #33AE7A;
 $success: #22c55e;
 $warning: #f59e0b;
 $danger: #ef4444;
 $info: #3b82f6;
 
-$dark-bg: #071A10;
-$dark-surface: #0D2B1A;
-$dark-border: #1A4A2E;
-$dark-text: #E8F5EE;
-$dark-text-muted: #7BB898;
+// 다크모드 — 무채색 기반, 포인트만 그린
+$dark-bg: #111111;
+$dark-surface: #1C1C1C;
+$dark-border: #2E2E2E;
+$dark-text: #F0F0F0;
+$dark-text-muted: #888888;
 
-$light-bg: #F4FAF7;
-$light-surface: #ffffff;
-$light-border: #C8E6D6;
-$light-text: #071A10;
-$light-text-muted: #4A7B62;
+// 라이트모드 — 흰색 기반, 포인트만 그린
+$light-bg: #F5F6F7;
+$light-surface: #FFFFFF;
+$light-border: #E4E6E9;
+$light-text: #111111;
+$light-text-muted: #6B7280;
 
 $radius: 12px;
 $transition: 0.3s ease;
