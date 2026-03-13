@@ -35,7 +35,7 @@ server: {
   }
 }
 ```
-- [ ] 두 서버 정상 실행 확인
+- [x] 두 서버 정상 실행 확인
 ```powershell
 # backend (터미널 1)
 cd backend && dotnet run
