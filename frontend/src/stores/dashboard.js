@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { getMockOverview } from '@/mock/overview.js'
+import mockPullRequests from '@/mock/pull_requests.json'
+import mockDevelopers from '@/mock/developers.json'
+import mockInsights from '@/mock/ai_insights.json'
 
 export const useDashboardStore = defineStore('dashboard', {
   state: () => ({
@@ -20,6 +24,8 @@ export const useDashboardStore = defineStore('dashboard', {
       try {
         const { data } = await axios.get('/api/v1/overview')
         this.overview = data
+      } catch {
+        this.overview = getMockOverview()
       } finally {
         this.loading.overview = false
       }
@@ -29,6 +35,8 @@ export const useDashboardStore = defineStore('dashboard', {
       try {
         const { data } = await axios.get('/api/v1/pull-requests')
         this.pullRequests = data
+      } catch {
+        this.pullRequests = mockPullRequests
       } finally {
         this.loading.pullRequests = false
       }
@@ -38,6 +46,8 @@ export const useDashboardStore = defineStore('dashboard', {
       try {
         const { data } = await axios.get('/api/v1/developers')
         this.developers = data
+      } catch {
+        this.developers = mockDevelopers
       } finally {
         this.loading.developers = false
       }
@@ -47,6 +57,8 @@ export const useDashboardStore = defineStore('dashboard', {
       try {
         const { data } = await axios.get('/api/v1/insights')
         this.insights = data
+      } catch {
+        this.insights = mockInsights
       } finally {
         this.loading.insights = false
       }

@@ -1,0 +1,9 @@
+[
+  { "id": 1, "name": "김지훈", "role": "Backend Lead / EMR 도메인", "totalPr": 48, "mergedPr": 44, "avgQuality": 93, "avgReviewHours": 11, "radar": { "speed": 85, "quality": 95, "collaboration": 88, "consistency": 92, "coverage": 78 } },
+  { "id": 2, "name": "이수민", "role": "Frontend / 환자포털", "totalPr": 39, "mergedPr": 34, "avgQuality": 89, "avgReviewHours": 18, "radar": { "speed": 92, "quality": 87, "collaboration": 95, "consistency": 84, "coverage": 70 } },
+  { "id": 3, "name": "박재영", "role": "Backend / 보험청구·OCS", "totalPr": 52, "mergedPr": 47, "avgQuality": 91, "avgReviewHours": 14, "radar": { "speed": 78, "quality": 93, "collaboration": 82, "consistency": 95, "coverage": 85 } },
+  { "id": 4, "name": "최혜진", "role": "인터페이스팀 / HL7·FHIR", "totalPr": 35, "mergedPr": 30, "avgQuality": 87, "avgReviewHours": 21, "radar": { "speed": 70, "quality": 90, "collaboration": 88, "consistency": 80, "coverage": 72 } },
+  { "id": 5, "name": "정성준", "role": "인프라 / DevOps", "totalPr": 28, "mergedPr": 27, "avgQuality": 90, "avgReviewHours": 9, "radar": { "speed": 88, "quality": 89, "collaboration": 75, "consistency": 90, "coverage": 82 } },
+  { "id": 6, "name": "강미래", "role": "QA / 테스트 자동화", "totalPr": 22, "mergedPr": 19, "avgQuality": 84, "avgReviewHours": 24, "radar": { "speed": 75, "quality": 92, "collaboration": 90, "consistency": 78, "coverage": 95 } },
+  { "id": 7, "name": "윤도현", "role": "보안 / 개인정보보호", "totalPr": 18, "mergedPr": 17, "avgQuality": 95, "avgReviewHours": 16, "radar": { "speed": 65, "quality": 98, "collaboration": 80, "consistency": 93, "coverage": 88 } }
+]
