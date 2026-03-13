@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { getMockOverview } from '@/mock/overview.js'
 import mockPullRequests from '@/mock/pull_requests.json'
 import mockDevelopers from '@/mock/developers.json'
@@ -19,6 +19,14 @@ interface DashboardState {
   developers: Developer[]
   insights: AiInsight[]
   loading: LoadingState
+  errors: Partial<Record<keyof LoadingState, string>>
+}
+
+function logApiError(action: string, err: unknown): void {
+  const message = err instanceof AxiosError
+    ? `[${err.response?.status ?? 'NETWORK'}] ${err.message}`
+    : String(err)
+  console.warn(`[DevLens] ${action} API 실패 — Mock 데이터로 fallback. (${message})`)
 }
 
 export const useDashboardStore = defineStore('dashboard', {
@@ -32,15 +40,19 @@ export const useDashboardStore = defineStore('dashboard', {
       pullRequests: false,
       developers: false,
       insights: false
-    }
+    },
+    errors: {}
   }),
   actions: {
     async fetchOverview(): Promise<void> {
       this.loading.overview = true
+      this.errors.overview = undefined
       try {
         const { data } = await axios.get<Overview>('/api/v1/overview')
         this.overview = data
-      } catch {
+      } catch (err) {
+        logApiError('fetchOverview', err)
+        this.errors.overview = 'API 연결 실패 — Mock 데이터 표시 중'
         this.overview = getMockOverview()
       } finally {
         this.loading.overview = false
@@ -48,10 +60,13 @@ export const useDashboardStore = defineStore('dashboard', {
     },
     async fetchPullRequests(): Promise<void> {
       this.loading.pullRequests = true
+      this.errors.pullRequests = undefined
       try {
         const { data } = await axios.get<PullRequest[]>('/api/v1/pull-requests')
         this.pullRequests = data
-      } catch {
+      } catch (err) {
+        logApiError('fetchPullRequests', err)
+        this.errors.pullRequests = 'API 연결 실패 — Mock 데이터 표시 중'
         this.pullRequests = mockPullRequests as PullRequest[]
       } finally {
         this.loading.pullRequests = false
@@ -59,10 +74,13 @@ export const useDashboardStore = defineStore('dashboard', {
     },
     async fetchDevelopers(): Promise<void> {
       this.loading.developers = true
+      this.errors.developers = undefined
       try {
         const { data } = await axios.get<Developer[]>('/api/v1/developers')
         this.developers = data
-      } catch {
+      } catch (err) {
+        logApiError('fetchDevelopers', err)
+        this.errors.developers = 'API 연결 실패 — Mock 데이터 표시 중'
         this.developers = mockDevelopers as Developer[]
       } finally {
         this.loading.developers = false
@@ -70,10 +88,13 @@ export const useDashboardStore = defineStore('dashboard', {
     },
     async fetchInsights(): Promise<void> {
       this.loading.insights = true
+      this.errors.insights = undefined
       try {
         const { data } = await axios.get<AiInsight[]>('/api/v1/insights')
         this.insights = data
-      } catch {
+      } catch (err) {
+        logApiError('fetchInsights', err)
+        this.errors.insights = 'API 연결 실패 — Mock 데이터 표시 중'
         this.insights = mockInsights as AiInsight[]
       } finally {
         this.loading.insights = false

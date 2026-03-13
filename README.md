@@ -167,7 +167,9 @@ Swagger UI: **http://localhost:5062/swagger**
 | **Backend** | ASP.NET Core 9 | 유비케어 C# 기술 스택과 일치 |
 | | Swashbuckle | API 문서 자동화 (외부 연동 병원 대응) |
 | **데이터** | Mock JSON | 실제 PHI 데이터 없이 데모 가능 |
-| **CI/CD** | GitHub Actions | PR 푸시 시 frontend/backend 빌드 자동화 |
+| **CI** | GitHub Actions | PR 푸시 시 frontend 빌드·테스트 + backend 빌드 자동화 |
+| **CD** | GitHub Pages | 프론트엔드 정적 빌드 자동 배포 (백엔드 배포 없음) |
+| **테스트** | Vitest + TypeScript | Pinia 스토어 단위 테스트 8건 |
 
 ---
 

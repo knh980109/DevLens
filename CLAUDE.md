@@ -3,7 +3,9 @@
 ## 프로젝트 개요
 - **프로젝트명**: DevLens - AI Code Review Dashboard
 - **목표**: PR/코드 리뷰 현황을 AI 분석 기반으로 시각화하는 대시보드
-- **기술 스택**: Vue3 + Vite + SCSS + ApexCharts / ASP.NET Core 9 (C#)
+- **기술 스택**: Vue3 + Vite + TypeScript + SCSS + ApexCharts / ASP.NET Core 9 (C#)
+- **테스트**: Vitest + @vue/test-utils (단위 테스트 15건)
+- **배포**: GitHub Pages (CD, 프론트엔드 정적 빌드만)
 - **데이터**: Mock JSON (실제 DB/API 미사용)
 - **포트**: Frontend 5173 / Backend 5062
 
@@ -40,8 +42,9 @@ DevLens/
 ├── PRD.md                  # 제품 요구사항 문서
 ├── README.md               # 프로젝트 소개 및 실행 가이드
 ├── TESTING.md              # 테스트 전략 문서
-├── .github/workflows/      # GitHub Actions CI/CD
-│   └── ci.yml
+├── .github/workflows/
+│   ├── ci.yml              # CI: 빌드 + Vitest 테스트 (push/PR)
+│   └── cd.yml              # CD: GitHub Pages 정적 배포 (main push, 프론트엔드만)
 ├── backend/                # ASP.NET Core 9
 │   ├── Controllers/
 │   │   └── DashboardController.cs  # 4개 REST 엔드포인트
@@ -59,30 +62,37 @@ DevLens/
 └── frontend/               # Vue3 + Vite
     └── src/
         ├── App.vue                 # 루트: 다크모드 provide, 라우터 트랜지션
-        ├── main.js                 # Pinia, Vue Router 등록
+        ├── main.ts                 # Pinia, Vue Router 등록 (TypeScript)
+        ├── types/
+        │   └── index.ts            # PullRequest, Developer, AiInsight, Overview 타입
+        ├── mock/                   # 프론트엔드 fallback Mock 데이터
+        │   ├── pull_requests.json
+        │   ├── developers.json
+        │   ├── ai_insights.json
+        │   └── overview.js         # Mock overview 계산 함수
         ├── assets/styles/
-        │   ├── _variables.scss     # 색상·반경·전환 SCSS 변수
+        │   ├── _variables.scss     # GC메디아이 브랜드 색상·반경·전환 SCSS 변수
         │   └── main.scss           # CSS Variables (다크/라이트), 전역 스타일
         ├── components/
         │   ├── common/
-        │   │   ├── AppHeader.vue   # 네비게이션 + 다크모드 토글
+        │   │   ├── AppHeader.vue   # 네비게이션 + 다크모드 토글 + SVG 로고
         │   │   ├── StatCard.vue    # rAF 카운터 애니메이션 카드
         │   │   └── LoadingSpinner.vue
         │   ├── charts/
-        │   │   ├── LineChart.vue   # ApexCharts Area 차트
+        │   │   ├── LineChart.vue   # ApexCharts Area 차트 (1280px/768px 반응형)
         │   │   ├── GaugeChart.vue  # ApexCharts RadialBar 게이지
         │   │   └── RadarChart.vue  # ApexCharts Radar 차트
         │   └── pr/
-        │       └── PrDetailPanel.vue  # 우측 슬라이드 패널 (ESC/외부클릭 닫기)
+        │       └── PrDetailPanel.vue  # 우측 슬라이드 패널 (ESC/외부클릭 닫기, Teleport)
         ├── views/
-        │   ├── OverviewView.vue    # 6 KPI 카드 + 4개 차트
+        │   ├── OverviewView.vue    # 6 KPI 카드 + 4개 차트, @media 768px 반응형
         │   ├── PrListView.vue      # 필터 탭 + 테이블 + 슬라이드 패널
         │   ├── DeveloperView.vue   # 카드 그리드 + 레이더 모달
         │   └── InsightView.vue     # 심각도 필터 + stagger 카드
         ├── stores/
-        │   └── dashboard.js        # Pinia: 4개 fetch 액션, loading 상태
+        │   └── dashboard.ts        # Pinia: 타입 안전 4개 fetch 액션, 에러 로깅, Mock fallback
         └── router/
-            └── index.js            # 4개 라우트 + lazy loading
+            └── index.ts            # 4개 라우트 + lazy loading (prod: hash, dev: history)
 ```
 
 ## API 목록
@@ -143,3 +153,18 @@ DevLens/
 **[이슈 4] SCSS `@use` vs `@import` 충돌**
 - 현상: `@import` 사용 시 Vite/Sass deprecation 경고
 - 해결: `@use 'variables' as *` 방식으로 전환
+
+## 에러 처리 전략
+
+### Frontend API 에러 처리
+| 레이어 | 전략 |
+|--------|------|
+| Pinia Store | try/catch → `console.warn` 로깅 + Mock 데이터 fallback |
+| 에러 메시지 | `store.errors[key]` 에 상태 문자열 저장, 필요시 뷰에서 표시 가능 |
+| 로깅 포맷 | `[DevLens] {action} API 실패 — Mock 데이터로 fallback. ([STATUS] message)` |
+| 사용자 경험 | 에러 발생 시 Mock 데이터로 자동 전환 → 빈 화면 없음 |
+
+### 에러 처리 미포함 범위
+- 실제 서버 오류 알림 UI (토스트/배너): 데모 버전 범위 제외
+- 재시도(Retry) 로직: 백엔드가 로컬 전용이므로 미구현
+- 글로벌 에러 바운더리: Vue `onErrorCaptured` 미적용 (추후 구현 예정)
