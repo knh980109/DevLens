@@ -12,3 +12,8 @@
   - PR 상세 정보 + AI 코드 품질 분석 요약
   - ESC 키 / 바깥 클릭 시 닫기
 - [x] 완료 후 sprint_7.md 로 이동
+
+## 관련 커밋
+| 커밋 해시 | 메시지 |
+|-----------|--------|
+| `70bf706` | feat: DevLens AI Code Review Dashboard 초기 구현 |

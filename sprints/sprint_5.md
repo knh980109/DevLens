@@ -11,3 +11,9 @@
 - [x] `components/charts/GaugeChart.vue` - ApexCharts 반원 게이지
 - [x] API 연동 (fetchOverview, fetchPullRequests 호출)
 - [x] 완료 후 sprint_6.md 로 이동
+
+## 관련 커밋
+| 커밋 해시 | 메시지 |
+|-----------|--------|
+| `70bf706` | feat: DevLens AI Code Review Dashboard 초기 구현 |
+| `94b2956` | feat: GitHub Pages 배포 설정 (Mock fallback, hash router, deploy workflow) |

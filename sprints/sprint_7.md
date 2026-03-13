@@ -10,3 +10,9 @@
   - 5개 축: 속도 / 품질 / 협업 / 일관성 / 커버리지
 - [x] 개발자 카드 hover 애니메이션 (transform: translateY)
 - [x] 완료 후 sprint_8.md 로 이동
+
+## 관련 커밋
+| 커밋 해시 | 메시지 |
+|-----------|--------|
+| `70bf706` | feat: DevLens AI Code Review Dashboard 초기 구현 |
+| `3b048b5` | feat: GC메디아이 브랜딩 적용 및 의료IT 실무 데이터 반영 |

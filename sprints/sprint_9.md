@@ -10,3 +10,10 @@
 - [x] 전체 흐름 시연 테스트 (서버 실행 후 직접 확인 필요)
   - Overview → PR 목록 → 상세 패널 → 개발자 분석 → AI 인사이트
 - [x] 완료 후 sprint_10.md 로 이동
+
+## 관련 커밋
+| 커밋 해시 | 메시지 |
+|-----------|--------|
+| `70bf706` | feat: DevLens AI Code Review Dashboard 초기 구현 |
+| `3fcd150` | fix: SVG 인라인 전환 및 색상 시스템 무채색+포인트 그린으로 조정 |
+| `52669d1` | chore: sprint.md 체크박스 완료, style.css 제거, CI+deploy 워크플로우 통합 |

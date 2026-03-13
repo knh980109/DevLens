@@ -10,3 +10,9 @@
 - [x] `Controllers/DashboardController.cs` - 4개 API 엔드포인트 구현
 - [x] `http://localhost:5062/api/v1/overview` 응답 확인 (서버 실행 후 확인)
 - [x] 완료 후 sprint_3.md 로 이동
+
+## 관련 커밋
+| 커밋 해시 | 메시지 |
+|-----------|--------|
+| `70bf706` | feat: DevLens AI Code Review Dashboard 초기 구현 |
+| `3b048b5` | feat: GC메디아이 브랜딩 적용 및 의료IT 실무 데이터 반영 |

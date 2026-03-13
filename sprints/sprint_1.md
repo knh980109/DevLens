@@ -44,3 +44,8 @@ cd backend && dotnet run
 cd frontend && npm run dev
 ```
 - [x] 완료 후 sprint_2.md 로 이동
+
+## 관련 커밋
+| 커밋 해시 | 메시지 |
+|-----------|--------|
+| `70bf706` | feat: DevLens AI Code Review Dashboard 초기 구현 |
