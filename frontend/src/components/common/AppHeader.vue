@@ -2,8 +2,11 @@
   <header class="app-header">
     <div class="header-inner">
       <div class="logo">
-        <span class="logo-icon">&#128269;</span>
-        <span class="logo-text">DevLens</span>
+        <img src="@/assets/logo.svg" alt="DevLens" class="logo-img" />
+        <div class="logo-texts">
+          <span class="logo-text">DevLens</span>
+          <span class="logo-sub">GC메디아이 코드 리뷰 대시보드</span>
+        </div>
       </div>
       <nav class="nav">
         <router-link to="/overview" class="nav-link">Overview</router-link>
@@ -46,10 +49,32 @@ const { isDark, toggleTheme } = inject('theme')
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.2rem;
+  gap: 0.6rem;
+}
+
+.logo-img {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.logo-texts {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.logo-text {
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--primary);
+}
+
+.logo-sub {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }
 
 .nav {

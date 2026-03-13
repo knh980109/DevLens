@@ -1,9 +1,9 @@
 [
-  { "id": 1, "name": "한지민", "role": "Backend", "totalPr": 28, "mergedPr": 24, "avgQuality": 91, "avgReviewHours": 14, "radar": { "speed": 88, "quality": 91, "collaboration": 94, "consistency": 90, "coverage": 85 } },
-  { "id": 2, "name": "오승환", "role": "Frontend", "totalPr": 21, "mergedPr": 17, "avgQuality": 84, "avgReviewHours": 22, "radar": { "speed": 80, "quality": 84, "collaboration": 89, "consistency": 76, "coverage": 72 } },
-  { "id": 3, "name": "이도연", "role": "Backend", "totalPr": 35, "mergedPr": 32, "avgQuality": 96, "avgReviewHours": 9, "radar": { "speed": 97, "quality": 96, "collaboration": 93, "consistency": 98, "coverage": 94 } },
-  { "id": 4, "name": "강태양", "role": "Frontend", "totalPr": 18, "mergedPr": 13, "avgQuality": 79, "avgReviewHours": 28, "radar": { "speed": 68, "quality": 79, "collaboration": 85, "consistency": 72, "coverage": 67 } },
-  { "id": 5, "name": "박서연", "role": "DevOps", "totalPr": 14, "mergedPr": 12, "avgQuality": 88, "avgReviewHours": 17, "radar": { "speed": 83, "quality": 88, "collaboration": 97, "consistency": 91, "coverage": 86 } },
-  { "id": 6, "name": "김준혁", "role": "Backend", "totalPr": 23, "mergedPr": 19, "avgQuality": 87, "avgReviewHours": 19, "radar": { "speed": 82, "quality": 87, "collaboration": 88, "consistency": 84, "coverage": 89 } },
-  { "id": 7, "name": "최나은", "role": "Frontend", "totalPr": 16, "mergedPr": 14, "avgQuality": 92, "avgReviewHours": 13, "radar": { "speed": 90, "quality": 92, "collaboration": 91, "consistency": 88, "coverage": 83 } }
+  { "id": 1, "name": "김지훈", "role": "Backend Lead / EMR 도메인", "totalPr": 48, "mergedPr": 44, "avgQuality": 93, "avgReviewHours": 11, "radar": { "speed": 85, "quality": 95, "collaboration": 88, "consistency": 92, "coverage": 78 } },
+  { "id": 2, "name": "이수민", "role": "Frontend / 환자포털", "totalPr": 39, "mergedPr": 34, "avgQuality": 89, "avgReviewHours": 18, "radar": { "speed": 92, "quality": 87, "collaboration": 95, "consistency": 84, "coverage": 70 } },
+  { "id": 3, "name": "박재영", "role": "Backend / 보험청구·OCS", "totalPr": 52, "mergedPr": 47, "avgQuality": 91, "avgReviewHours": 14, "radar": { "speed": 78, "quality": 93, "collaboration": 82, "consistency": 95, "coverage": 85 } },
+  { "id": 4, "name": "최혜진", "role": "인터페이스팀 / HL7·FHIR", "totalPr": 35, "mergedPr": 30, "avgQuality": 87, "avgReviewHours": 21, "radar": { "speed": 70, "quality": 90, "collaboration": 88, "consistency": 80, "coverage": 72 } },
+  { "id": 5, "name": "정성준", "role": "인프라 / DevOps", "totalPr": 28, "mergedPr": 27, "avgQuality": 90, "avgReviewHours": 9, "radar": { "speed": 88, "quality": 89, "collaboration": 75, "consistency": 90, "coverage": 82 } },
+  { "id": 6, "name": "강미래", "role": "QA / 테스트 자동화", "totalPr": 22, "mergedPr": 19, "avgQuality": 84, "avgReviewHours": 24, "radar": { "speed": 75, "quality": 92, "collaboration": 90, "consistency": 78, "coverage": 95 } },
+  { "id": 7, "name": "윤도현", "role": "보안 / 개인정보보호", "totalPr": 18, "mergedPr": 17, "avgQuality": 95, "avgReviewHours": 16, "radar": { "speed": 65, "quality": 98, "collaboration": 80, "consistency": 93, "coverage": 88 } }
 ]
