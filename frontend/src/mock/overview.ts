@@ -1,7 +1,8 @@
+import type { Overview } from '@/types/index'
 import pullRequests from './pull_requests.json'
 import developers from './developers.json'
 
-export function getMockOverview() {
+export function getMockOverview(): Overview {
   const prs = pullRequests
   const devs = developers
   return {

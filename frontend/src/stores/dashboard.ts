@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import axios, { AxiosError } from 'axios'
-import { getMockOverview } from '@/mock/overview.js'
+import { getMockOverview } from '@/mock/overview'
 import mockPullRequests from '@/mock/pull_requests.json'
 import mockDevelopers from '@/mock/developers.json'
 import mockInsights from '@/mock/ai_insights.json'
