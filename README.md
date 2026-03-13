@@ -16,6 +16,12 @@
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core_9-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![CI](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 
+<br/>
+
+### 🌐 [라이브 데모 → knh980109.github.io/DevLens](https://knh980109.github.io/DevLens/)
+
+> 백엔드 없이 Mock 데이터로 모든 기능 동작 · 별도 설치 불필요
+
 </div>
 
 ---
@@ -97,6 +103,14 @@ DevLens/
 ---
 
 ## 🚀 시작하기
+
+### 바로 보기 (설치 불필요)
+
+**👉 https://knh980109.github.io/DevLens/**
+
+GitHub Pages로 배포된 라이브 데모입니다. Mock 데이터 기반으로 백엔드 없이 모든 기능이 동작합니다.
+
+### 로컬 실행 (풀스택)
 
 ### 요구사항
 
