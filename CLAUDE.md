@@ -69,7 +69,7 @@ DevLens/
         │   ├── pull_requests.json
         │   ├── developers.json
         │   ├── ai_insights.json
-        │   └── overview.js         # Mock overview 계산 함수
+        │   └── overview.ts         # Mock overview 계산 함수 (Overview 타입 반환)
         ├── assets/styles/
         │   ├── _variables.scss     # GC메디아이 브랜드 색상·반경·전환 SCSS 변수
         │   └── main.scss           # CSS Variables (다크/라이트), 전역 스타일
@@ -89,6 +89,8 @@ DevLens/
         │   ├── PrListView.vue      # 필터 탭 + 테이블 + 슬라이드 패널
         │   ├── DeveloperView.vue   # 카드 그리드 + 레이더 모달
         │   └── InsightView.vue     # 심각도 필터 + stagger 카드
+        ├── utils/
+        │   └── quality.ts          # qualityClass 순수 함수 (score → CSS 클래스 문자열)
         ├── stores/
         │   └── dashboard.ts        # Pinia: 타입 안전 4개 fetch 액션, 에러 로깅, Mock fallback
         └── router/

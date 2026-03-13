@@ -2,6 +2,10 @@
   <div class="insight-view">
     <h2 class="page-title">AI 인사이트</h2>
 
+    <div v-if="store.errors.insights" class="api-error-banner">
+      ⚠️ {{ store.errors.insights }}
+    </div>
+
     <div class="filter-tabs">
       <button
         v-for="tab in tabs"
@@ -50,9 +54,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useDashboardStore } from '../stores/dashboard.js'
+import { useDashboardStore } from '../stores/dashboard'
 import LoadingSpinner from '../components/common/LoadingSpinner.vue'
 
 const store = useDashboardStore()
@@ -70,13 +74,13 @@ const filteredInsights = computed(() => {
   return store.insights.filter(i => i.severity === activeTab.value)
 })
 
-const tabCount = (tab) => {
+const tabCount = (tab: string): number => {
   if (tab === 'all') return store.insights.length
   return store.insights.filter(i => i.severity === tab).length
 }
 
-const severityIcon = (severity) => {
-  const icons = { critical: '🚨', warning: '⚠️', info: 'ℹ️' }
+const severityIcon = (severity: string): string => {
+  const icons: Record<string, string> = { critical: '🚨', warning: '⚠️', info: 'ℹ️' }
   return icons[severity] ?? '📌'
 }
 

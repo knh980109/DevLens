@@ -7,6 +7,10 @@
       </div>
     </div>
 
+    <div v-if="store.errors.overview" class="api-error-banner">
+      ⚠️ {{ store.errors.overview }}
+    </div>
+
     <LoadingSpinner v-if="store.loading.overview" text="데이터 불러오는 중..." />
 
     <template v-else-if="store.overview">
@@ -77,10 +81,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import VueApexCharts from 'vue3-apexcharts'
-import { useDashboardStore } from '../stores/dashboard.js'
+import { useDashboardStore } from '../stores/dashboard'
 import StatCard from '../components/common/StatCard.vue'
 import LoadingSpinner from '../components/common/LoadingSpinner.vue'
 import GaugeChart from '../components/charts/GaugeChart.vue'

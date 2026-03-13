@@ -2,6 +2,10 @@
   <div class="pr-list">
     <h2 class="page-title">PR 목록</h2>
 
+    <div v-if="store.errors.pullRequests" class="api-error-banner">
+      ⚠️ {{ store.errors.pullRequests }}
+    </div>
+
     <div class="filter-tabs">
       <button
         v-for="tab in tabs"
@@ -61,9 +65,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useDashboardStore } from '../stores/dashboard.js'
+import { useDashboardStore } from '../stores/dashboard'
+import { qualityClass } from '../utils/quality'
 import LoadingSpinner from '../components/common/LoadingSpinner.vue'
 import PrDetailPanel from '../components/pr/PrDetailPanel.vue'
 
@@ -83,16 +88,11 @@ const filteredPrs = computed(() => {
   return store.pullRequests.filter(pr => pr.status === activeTab.value)
 })
 
-const tabCount = (tab) => {
+const tabCount = (tab: string): number => {
   if (tab === 'all') return store.pullRequests.length
   return store.pullRequests.filter(pr => pr.status === tab).length
 }
 
-const qualityClass = (score) => {
-  if (score >= 90) return 'quality--high'
-  if (score >= 70) return 'quality--mid'
-  return 'quality--low'
-}
 
 onMounted(() => {
   store.fetchPullRequests()

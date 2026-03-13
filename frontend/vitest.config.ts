@@ -15,7 +15,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       include: ['src/stores/**', 'src/components/**', 'src/mock/**'],
-      exclude: ['src/**/__tests__/**', 'src/mock/overview.js']
+      exclude: ['src/**/__tests__/**', 'src/utils/__tests__/**']
     }
   }
 })

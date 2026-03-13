@@ -2,6 +2,10 @@
   <div class="developer-view">
     <h2 class="page-title">개발자 분석</h2>
 
+    <div v-if="store.errors.developers" class="api-error-banner">
+      ⚠️ {{ store.errors.developers }}
+    </div>
+
     <LoadingSpinner v-if="store.loading.developers" text="개발자 데이터 불러오는 중..." />
 
     <div v-else-if="store.developers.length" class="dev-grid">
@@ -80,18 +84,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useDashboardStore } from '../stores/dashboard.js'
+import { useDashboardStore } from '../stores/dashboard'
 import LoadingSpinner from '../components/common/LoadingSpinner.vue'
 import RadarChart from '../components/charts/RadarChart.vue'
+import type { Developer } from '../types/index'
 
 const store = useDashboardStore()
-const selectedDev = ref(null)
+const selectedDev = ref<Developer | null>(null)
 
-const mergeRate = (dev) => dev.totalPr ? Math.round((dev.mergedPr / dev.totalPr) * 100) : 0
+const mergeRate = (dev: Developer): number => dev.totalPr ? Math.round((dev.mergedPr / dev.totalPr) * 100) : 0
 
-const qualityColor = (score) => {
+const qualityColor = (score: number): string => {
   if (score >= 90) return 'var(--success)'
   if (score >= 70) return 'var(--warning)'
   return 'var(--danger)'
