@@ -9,6 +9,13 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
-    globals: true
+    globals: true,
+    exclude: ['**/node_modules/**', '**/e2e/**'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      include: ['src/stores/**', 'src/components/**', 'src/mock/**'],
+      exclude: ['src/**/__tests__/**', 'src/mock/overview.js']
+    }
   }
 })

@@ -1,15 +1,22 @@
 # TESTING.md - 테스트 전략
 
-## 1. 테스트 전략 개요
+## 현재 구현 상태
 
-DevLens는 Mock 데이터 기반 대시보드 프로젝트로, 다음 3개 레이어에 대한 테스트 전략을 정의합니다.
+| 레이어 | 도구 | 구현 파일 | 테스트 수 | 상태 |
+|--------|------|-----------|-----------|------|
+| 단위 테스트 | Vitest + @vue/test-utils | `stores/__tests__/dashboard.test.ts` | 8건 | ✅ 구현 완료 |
+| 컴포넌트 테스트 | Vitest + @vue/test-utils | `components/common/__tests__/StatCard.test.ts` | 7건 | ✅ 구현 완료 |
+| E2E 테스트 | Playwright | `e2e/dashboard.spec.ts` | 8건 | ✅ 구현 완료 |
+| 통합 테스트 | MSW + Vue Test Utils | — | — | 📋 전략 수립 완료 |
+
+**총 자동화 테스트: 23건 (단위 15건 + E2E 8건)**
 
 ```
-E2E 테스트 (Playwright)
+E2E 테스트 (Playwright) ✅
         ↑
-통합 테스트 (Vue Test Utils + MSW)
+통합 테스트 (Vue Test Utils + MSW) 📋
         ↑
-단위 테스트 (Vitest)
+단위 테스트 (Vitest) ✅
 ```
 
 ---
