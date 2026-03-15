@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { useDashboardStore } from '../dashboard'
 
 vi.mock('axios')
@@ -90,6 +90,18 @@ describe('useDashboardStore', () => {
   })
 
   describe('fetchDevelopers', () => {
+    it('API 성공 시 developers 배열이 채워진다', async () => {
+      const mockDev = [{ id: 1, name: '김지훈', role: '백엔드', totalPr: 10, mergedPr: 8,
+        avgQuality: 88, avgReviewHours: 14, radar: { speed:80, quality:88, collaboration:75, consistency:82, coverage:70 } }]
+      mockedAxios.get = vi.fn().mockResolvedValue({ data: mockDev })
+      const store = useDashboardStore()
+
+      await store.fetchDevelopers()
+
+      expect(store.developers).toHaveLength(1)
+      expect(store.loading.developers).toBe(false)
+    })
+
     it('API 실패 시 Mock 개발자 데이터 7명이 로드된다', async () => {
       mockedAxios.get = vi.fn().mockRejectedValue(new Error('Network Error'))
       const store = useDashboardStore()
@@ -97,11 +109,23 @@ describe('useDashboardStore', () => {
       await store.fetchDevelopers()
 
       expect(store.developers).toHaveLength(7)
-      expect(store.developers[0].name).toBe('김지훈')
+      expect(store.errors.developers).toBeTruthy()
     })
   })
 
   describe('fetchInsights', () => {
+    it('API 성공 시 insights 배열이 채워진다', async () => {
+      const mockInsight = [{ id: 1, severity: 'warning' as const, category: '성능',
+        title: '테스트', description: '설명', file: 'test.ts', line: 1, suggestion: '제안' }]
+      mockedAxios.get = vi.fn().mockResolvedValue({ data: mockInsight })
+      const store = useDashboardStore()
+
+      await store.fetchInsights()
+
+      expect(store.insights).toHaveLength(1)
+      expect(store.loading.insights).toBe(false)
+    })
+
     it('API 실패 시 Mock 인사이트 12건이 로드된다', async () => {
       mockedAxios.get = vi.fn().mockRejectedValue(new Error('Network Error'))
       const store = useDashboardStore()
@@ -109,6 +133,7 @@ describe('useDashboardStore', () => {
       await store.fetchInsights()
 
       expect(store.insights).toHaveLength(12)
+      expect(store.errors.insights).toBeTruthy()
     })
 
     it('인사이트에 critical severity가 포함된다', async () => {
@@ -119,6 +144,21 @@ describe('useDashboardStore', () => {
 
       const criticals = store.insights.filter(i => i.severity === 'critical')
       expect(criticals.length).toBeGreaterThan(0)
+    })
+  })
+
+  describe('AxiosError 처리', () => {
+    it('AxiosError 발생 시 에러 상태가 저장되고 Mock fallback된다', async () => {
+      const axiosError = new AxiosError('Request failed', 'ERR_BAD_RESPONSE',
+        undefined, undefined, { status: 503, data: {}, statusText: 'Service Unavailable',
+          headers: {}, config: {} as never })
+      mockedAxios.get = vi.fn().mockRejectedValue(axiosError)
+      const store = useDashboardStore()
+
+      await store.fetchOverview()
+
+      expect(store.errors.overview).toBeTruthy()
+      expect(store.overview).not.toBeNull()
     })
   })
 })

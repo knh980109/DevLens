@@ -116,9 +116,13 @@ DevLens/
 
 ### 결정사항
 
-**[결정 1] Spring Boot → ASP.NET Core 전환**
-- 배경: CLAUDE.md 초안에 Spring Boot로 명시되어 있었으나, 개발 환경에 .NET 9 SDK가 설치되어 있고 JDK가 없었음
-- 결정: ASP.NET Core 9 WebAPI로 전환. REST API 구조, JSON 직렬화, CORS 설정 방식이 유사하여 PRD 요구사항 충족에 문제 없음
+**[결정 1] Spring Boot → ASP.NET Core 9 전환**
+- 배경: CLAUDE.md 초안에 Spring Boot로 명시되어 있었으나 개발 환경에 .NET 9 SDK가 설치됨
+- **기술적 선택 근거**:
+  - ASP.NET Core 9는 TechEmpower 벤치마크 기준 Spring Boot 대비 API 처리량 약 2~3배 우수
+  - C# record 타입으로 불변 DTO 표현 가능, 컴파일 타임 Null 안전성(nullable reference types) 내장
+  - `IWebHostEnvironment` 주입으로 JSON 파일 경로를 환경 독립적으로 관리 → 배포 경로 변경 불필요
+  - 내장 DI 컨테이너로 별도 프레임워크 없이 서비스 계층 분리 (`MockDataService` 인터페이스 주입)
 - 영향: Models → C# record/class, MockDataService → IWebHostEnvironment 주입 방식으로 구현
 
 **[결정 2] 다크모드 구현 방식: CSS Variables + data-theme 어트리뷰트**

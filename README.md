@@ -14,7 +14,8 @@
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core_9-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
-![CI](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
+[![CI](https://github.com/knh980109/DevLens/actions/workflows/ci.yml/badge.svg)](https://github.com/knh980109/DevLens/actions/workflows/ci.yml)
+[![CD](https://github.com/knh980109/DevLens/actions/workflows/cd.yml/badge.svg)](https://github.com/knh980109/DevLens/actions/workflows/cd.yml)
 
 <br/>
 
