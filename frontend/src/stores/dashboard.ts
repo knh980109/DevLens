@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
+import { logApiError, toUserMessage } from '@/utils/errorHandler'
 import { getMockOverview } from '@/mock/overview'
 import mockPullRequests from '@/mock/pull_requests.json'
 import mockDevelopers from '@/mock/developers.json'
@@ -20,13 +21,6 @@ interface DashboardState {
   insights: AiInsight[]
   loading: LoadingState
   errors: Partial<Record<keyof LoadingState, string>>
-}
-
-function logApiError(action: string, err: unknown): void {
-  const message = err instanceof AxiosError
-    ? `[${err.response?.status ?? 'NETWORK'}] ${err.message}`
-    : String(err)
-  console.warn(`[DevLens] ${action} API 실패 — Mock 데이터로 fallback. (${message})`)
 }
 
 export const useDashboardStore = defineStore('dashboard', {
@@ -52,7 +46,7 @@ export const useDashboardStore = defineStore('dashboard', {
         this.overview = data
       } catch (err) {
         logApiError('fetchOverview', err)
-        this.errors.overview = 'API 연결 실패 — Mock 데이터 표시 중'
+        this.errors.overview = toUserMessage(err)
         this.overview = getMockOverview()
       } finally {
         this.loading.overview = false
@@ -66,7 +60,7 @@ export const useDashboardStore = defineStore('dashboard', {
         this.pullRequests = data
       } catch (err) {
         logApiError('fetchPullRequests', err)
-        this.errors.pullRequests = 'API 연결 실패 — Mock 데이터 표시 중'
+        this.errors.pullRequests = toUserMessage(err)
         this.pullRequests = mockPullRequests as PullRequest[]
       } finally {
         this.loading.pullRequests = false
@@ -80,7 +74,7 @@ export const useDashboardStore = defineStore('dashboard', {
         this.developers = data
       } catch (err) {
         logApiError('fetchDevelopers', err)
-        this.errors.developers = 'API 연결 실패 — Mock 데이터 표시 중'
+        this.errors.developers = toUserMessage(err)
         this.developers = mockDevelopers as Developer[]
       } finally {
         this.loading.developers = false
@@ -94,7 +88,7 @@ export const useDashboardStore = defineStore('dashboard', {
         this.insights = data
       } catch (err) {
         logApiError('fetchInsights', err)
-        this.errors.insights = 'API 연결 실패 — Mock 데이터 표시 중'
+        this.errors.insights = toUserMessage(err)
         this.insights = mockInsights as AiInsight[]
       } finally {
         this.loading.insights = false
