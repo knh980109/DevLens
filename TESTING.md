@@ -4,22 +4,30 @@
 
 | 레이어 | 도구 | 구현 파일 | 테스트 수 | 상태 |
 |--------|------|-----------|-----------|------|
-| 스토어 단위 테스트 | Vitest | `stores/__tests__/dashboard.test.ts` | 13건 | ✅ 구현 완료 |
+| 스토어 단위 테스트 | Vitest | `stores/__tests__/dashboard.test.ts` | 11건 | ✅ 구현 완료 |
 | 컴포넌트 테스트 | Vitest + @vue/test-utils | `components/common/__tests__/StatCard.test.ts` | 7건 | ✅ 구현 완료 |
 | 유틸 단위 테스트 | Vitest | `utils/__tests__/quality.test.ts` | 3건 | ✅ 구현 완료 |
+| 에러 처리 유틸 | Vitest | `utils/__tests__/errorHandler.test.ts` | 8건 | ✅ 구현 완료 |
 | E2E 테스트 | Playwright | `e2e/dashboard.spec.ts` | 8건 | ✅ 구현 완료 |
 | 통합 테스트 | MSW + Vue Test Utils | — | — | 📋 전략 수립 완료 |
 
-**총 자동화 테스트: 31건 (단위 23건 + E2E 8건)**
+**총 자동화 테스트: 38건 (단위 30건 + E2E 8건)**
 
 ## 커버리지 현황 (vitest --coverage)
 
 | 지표 | 수치 |
 |------|------|
-| Statements | **84.78%** |
-| Lines | **88.37%** |
-| Functions | **79.16%** |
-| Branches | **43.24%** |
+| Statements | **86.53%** |
+| Lines | **89.58%** |
+| Functions | **80.76%** |
+| Branches | **55.31%** |
+
+| 파일 | Stmts | Branch | Funcs | Lines |
+|------|:-----:|:------:|:-----:|:-----:|
+| `stores/dashboard.ts` | 100% | 100% | 100% | 100% |
+| `utils/errorHandler.ts` | 100% | 100% | 100% | 100% |
+| `utils/quality.ts` | 100% | 100% | 100% | 100% |
+| `mock/overview.ts` | 100% | 100% | 100% | 100% |
 
 > 차트 컴포넌트(ApexCharts 래퍼)는 서드파티 UI 라이브러리 특성상 커버리지 대상 제외
 

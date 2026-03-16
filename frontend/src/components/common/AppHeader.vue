@@ -14,10 +14,10 @@
         </div>
       </div>
       <nav class="nav">
-        <router-link to="/overview" class="nav-link">Overview</router-link>
-        <router-link to="/pull-requests" class="nav-link">PR 목록</router-link>
-        <router-link to="/developers" class="nav-link">개발자</router-link>
-        <router-link to="/insights" class="nav-link">AI 인사이트</router-link>
+        <router-link to="/overview" class="nav-link" data-testid="nav-overview">Overview</router-link>
+        <router-link to="/pull-requests" class="nav-link" data-testid="nav-pr-list">PR 목록</router-link>
+        <router-link to="/developers" class="nav-link" data-testid="nav-developers">개발자</router-link>
+        <router-link to="/insights" class="nav-link" data-testid="nav-insights">AI 인사이트</router-link>
       </nav>
       <button class="theme-toggle" @click="toggleTheme" :title="isDark ? '라이트모드' : '다크모드'">
         {{ isDark ? '☀️' : '🌙' }}
@@ -26,9 +26,12 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { inject } from 'vue'
-const { isDark, toggleTheme } = inject('theme')
+import type { Ref } from 'vue'
+
+interface ThemeContext { isDark: Ref<boolean>; toggleTheme: () => void }
+const { isDark, toggleTheme } = inject<ThemeContext>('theme')!
 </script>
 
 <style lang="scss" scoped>

@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 
 const props = defineProps({
@@ -38,7 +38,7 @@ onMounted(() => {
   const duration = 1000
   const startTime = performance.now()
 
-  const animate = (now) => {
+  const animate = (now: number) => {
     const elapsed = now - startTime
     const progress = Math.min(elapsed / duration, 1)
     const eased = 1 - Math.pow(1 - progress, 3)

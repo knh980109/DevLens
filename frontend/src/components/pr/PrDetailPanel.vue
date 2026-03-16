@@ -57,7 +57,7 @@
   </teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
@@ -79,7 +79,7 @@ const qualityComment = computed(() => {
   return '코드 품질 개선이 필요합니다. 상세 리뷰가 필요합니다.'
 })
 
-const handleKeydown = (e) => {
+const handleKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Escape') emit('close')
 }
 
