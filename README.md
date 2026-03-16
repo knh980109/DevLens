@@ -14,11 +14,11 @@
 ![Tests](https://img.shields.io/badge/단위_테스트-30_passed-brightgreen?style=flat-square&logo=vitest)
 ![E2E](https://img.shields.io/badge/E2E-8_scenarios-brightgreen?style=flat-square&logo=playwright)
 ![Coverage](https://img.shields.io/badge/커버리지-86.53%25-brightgreen?style=flat-square)
+![TypeScript](https://img.shields.io/badge/TypeScript-전체_적용-3178C6?style=flat-square&logo=typescript&logoColor=white)
 
 <br/>
 
 ![Vue3](https://img.shields.io/badge/Vue_3-4FC08D?style=flat-square&logo=vue.js&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite_8-646CFF?style=flat-square&logo=vite&logoColor=white)
 ![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=flat-square&logo=sass&logoColor=white)
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core_9-512BD4?style=flat-square&logo=dotnet&logoColor=white)
@@ -121,9 +121,9 @@ DevLens/
 │       └── router/index.ts         # hash(prod) / history(dev) 모드 분기
 │
 ├── backend/                        # ASP.NET Core 9 WebAPI
-│   ├── Controllers/DashboardController.cs   # 4개 REST 엔드포인트
+│   ├── Controllers/DashboardController.cs   # 4개 REST 엔드포인트 (Swagger 문서화)
 │   ├── Services/MockDataService.cs          # IWebHostEnvironment 주입
-│   ├── Models/                              # C# record 타입 (Null 안전성)
+│   ├── Models/                              # C# class 타입 (Null 안전성)
 │   └── Data/                               # 의료IT Mock JSON (25PR·7명·12건)
 │
 └── .github/workflows/
@@ -206,7 +206,7 @@ export function toUserMessage(err: unknown): string {
 | 에러 로깅 | `logApiError` — `[DevLens]` 접두어 + action명 포함 | ✅ |
 | 사용자 메시지 | `toUserMessage` — 5xx/4xx/네트워크 오류 3단계 분기 | ✅ |
 | Mock fallback | API 실패 시 Mock JSON 자동 로드, 빈 화면 없음 | ✅ |
-| 에러 배너 UI | 4개 뷰 `api-error-banner` 컴포넌트 표시 | ✅ |
+| 에러 배너 UI | 4개 뷰 `api-error-banner` 공통 표시 | ✅ |
 | Retry 로직 | 로컬 백엔드 전용 데모이므로 미구현 | — |
 | 글로벌 에러바운더리 | Vue `onErrorCaptured` — 추후 구현 예정 | — |
 
@@ -221,7 +221,7 @@ export function toUserMessage(err: unknown): string {
 
  Test Files  4 passed (4)
  Tests       30 passed (30)
- Duration    10.24s (transform 551ms, import 2.68s, tests 77ms)
+ Duration    10.24s
 ```
 
 | 테스트 파일 | 건수 | 검증 내용 |
@@ -232,26 +232,27 @@ export function toUserMessage(err: unknown): string {
 | `utils/__tests__/errorHandler.test.ts` | **8건** | extractErrorMessage(503/네트워크/일반), logApiError 접두어, toUserMessage(5xx/4xx/네트워크) |
 | **합계** | **30건** | **전체 통과** |
 
-### 커버리지 상세 (`npm run test:coverage`)
+### 테스트 커버리지 (Test Coverage)
 
 ```
--------------------|---------|----------|---------|---------|
-File               | % Stmts | % Branch | % Funcs | % Lines |
--------------------|---------|----------|---------|---------|
-stores/dashboard.ts|   100%  |   100%   |   100%  |   100%  |
-utils/errorHandler |   100%  |   100%   |   100%  |   100%  |
-utils/quality.ts   |   100%  |   100%   |   100%  |   100%  |
-mock/overview.ts   |   100%  |   100%   |   100%  |   100%  |
-components/StatCard|  91.66% |    80%   |   100%  |   100%  |
--------------------|---------|----------|---------|---------|
-전체 (측정 대상)    |  86.53% |  55.31%  |  80.76% |  89.58% |
--------------------|---------|----------|---------|---------|
+Statements : 86.53%
+Branches   : 55.31%
+Functions  : 80.76%
+Lines      : 89.58%
 ```
 
-> **핵심 비즈니스 로직(stores, utils, mock) 전체 100% 커버리지 달성**
+> 핵심 비즈니스 로직(stores, utils, mock) 100% 달성:
+
+```
+stores/dashboard.ts  → Statements 100% | Branches 100% | Functions 100% | Lines 100%
+utils/errorHandler   → Statements 100% | Branches 100% | Functions 100% | Lines 100%
+utils/quality.ts     → Statements 100% | Branches 100% | Functions 100% | Lines 100%
+mock/overview.ts     → Statements 100% | Branches 100% | Functions 100% | Lines 100%
+```
+
 > ApexCharts 래퍼 컴포넌트(GaugeChart/LineChart/RadarChart)는 서드파티 UI 특성상 커버리지 측정 제외
 
-📄 커버리지 HTML 리포트: [`frontend/coverage/index.html`](frontend/coverage/index.html)
+📄 커버리지 리포트: [`frontend/coverage/index.html`](frontend/coverage/index.html)
 
 ### 테스트 코드 예시
 
@@ -259,25 +260,35 @@ components/StatCard|  91.66% |    80%   |   100%  |   100%  |
 
 ```typescript
 // stores/__tests__/dashboard.test.ts
-import { AxiosError } from 'axios'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { setActivePinia, createPinia } from 'pinia'
+import axios, { AxiosError } from 'axios'
+import { useDashboardStore } from '../dashboard'
 
-it('API 성공 시 overview 데이터가 저장된다', async () => {
-  mockedAxios.get = vi.fn().mockResolvedValue({ data: mockOverviewData })
-  const store = useDashboardStore()
-  await store.fetchOverview()
-  expect(store.overview?.totalPr).toBe(25)
-  expect(store.overview?.avgQualityScore).toBe(89)
-})
+vi.mock('axios')
+const mockedAxios = vi.mocked(axios, true)
 
-it('AxiosError(503) 발생 시 에러 상태 저장 + Mock fallback', async () => {
-  const axiosError = new AxiosError('Request failed', 'ERR_BAD_RESPONSE',
-    undefined, undefined,
-    { status: 503, data: {}, statusText: 'Service Unavailable', headers: {}, config: {} as never })
-  mockedAxios.get = vi.fn().mockRejectedValue(axiosError)
-  const store = useDashboardStore()
-  await store.fetchOverview()
-  expect(store.errors.overview).toBeTruthy()   // 에러 상태 저장됨
-  expect(store.overview).not.toBeNull()         // Mock fallback 동작
+describe('fetchOverview', () => {
+  beforeEach(() => { setActivePinia(createPinia()); vi.clearAllMocks() })
+
+  it('API 성공 시 overview 데이터가 저장된다', async () => {
+    mockedAxios.get = vi.fn().mockResolvedValue({ data: { totalPr: 25, avgQualityScore: 89 } })
+    const store = useDashboardStore()
+    await store.fetchOverview()
+    expect(store.overview?.totalPr).toBe(25)          // ✅ 데이터 저장 확인
+    expect(store.loading.overview).toBe(false)         // ✅ 로딩 상태 해제
+  })
+
+  it('AxiosError(503) 발생 시 에러 상태 저장 + Mock fallback', async () => {
+    const axiosError = new AxiosError('Request failed', 'ERR_BAD_RESPONSE',
+      undefined, undefined,
+      { status: 503, data: {}, statusText: 'Service Unavailable', headers: {}, config: {} as never })
+    mockedAxios.get = vi.fn().mockRejectedValue(axiosError)
+    const store = useDashboardStore()
+    await store.fetchOverview()
+    expect(store.errors.overview).toBeTruthy()         // ✅ 에러 상태 저장
+    expect(store.overview).not.toBeNull()              // ✅ Mock fallback 동작
+  })
 })
 ```
 
@@ -285,16 +296,31 @@ it('AxiosError(503) 발생 시 에러 상태 저장 + Mock fallback', async () =
 
 ```typescript
 // utils/__tests__/errorHandler.test.ts
-it('5xx 에러는 서버 오류 메시지를 반환한다', () => {
-  const err = new AxiosError('Internal Server Error', 'ERR_BAD_RESPONSE',
-    undefined, undefined,
-    { status: 500, data: {}, statusText: '', headers: {}, config: {} as never })
-  expect(toUserMessage(err)).toBe('API 서버 오류 — Mock 데이터 표시 중')
-})
+import { describe, it, expect, vi, afterEach } from 'vitest'
+import { AxiosError } from 'axios'
+import { extractErrorMessage, logApiError, toUserMessage } from '../errorHandler'
 
-it('네트워크 오류(응답 없음)이면 [NETWORK]를 반환한다', () => {
-  const err = new AxiosError('Network Error')
-  expect(extractErrorMessage(err)).toBe('[NETWORK] Network Error')
+describe('errorHandler', () => {
+  afterEach(() => vi.restoreAllMocks())
+
+  it('AxiosError에서 [상태코드] 메시지 형식으로 추출한다', () => {
+    const err = new AxiosError('Request failed', 'ERR_BAD_RESPONSE',
+      undefined, undefined, { status: 503, data: {}, statusText: '', headers: {}, config: {} as never })
+    expect(extractErrorMessage(err)).toBe('[503] Request failed') // ✅
+  })
+
+  it('5xx 에러는 서버 오류 메시지를 반환한다', () => {
+    const err = new AxiosError('Server Error', 'ERR_BAD_RESPONSE',
+      undefined, undefined, { status: 500, data: {}, statusText: '', headers: {}, config: {} as never })
+    expect(toUserMessage(err)).toBe('API 서버 오류 — Mock 데이터 표시 중') // ✅
+  })
+
+  it('[DevLens] 접두어와 action명을 포함해 console.warn을 호출한다', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    logApiError('fetchOverview', new Error('test'))
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('[DevLens]'))      // ✅
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('fetchOverview'))  // ✅
+  })
 })
 ```
 
@@ -302,22 +328,33 @@ it('네트워크 오류(응답 없음)이면 [NETWORK]를 반환한다', () => {
 
 ```typescript
 // components/common/__tests__/StatCard.test.ts
-beforeEach(() => {
-  vi.spyOn(performance, 'now').mockReturnValue(0)
-  vi.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => {
-    cb(2000)  // elapsed(2000) > duration(1000) → 애니메이션 완료
-    return 0
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { mount } from '@vue/test-utils'
+import StatCard from '../StatCard.vue'
+
+describe('StatCard', () => {
+  beforeEach(() => {
+    vi.spyOn(performance, 'now').mockReturnValue(0)
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => {
+      cb(2000)  // elapsed(2000ms) > duration(1000ms) → 애니메이션 완료 처리
+      return 0
+    })
   })
-})
 
-it('trend가 양수이면 trend--up 클래스가 적용된다', () => {
-  const wrapper = mount(StatCard, { props: { title: 'Test', value: 0, trend: 5 } })
-  expect(wrapper.find('.stat-card__trend').classes()).toContain('trend--up')
-})
+  it('title과 icon props가 렌더링된다', () => {
+    const wrapper = mount(StatCard, { props: { title: '전체 PR', value: 25, icon: '📋' } })
+    expect(wrapper.find('.stat-card__title').text()).toBe('전체 PR')  // ✅
+  })
 
-it('color prop이 CSS 변수로 style에 적용된다', () => {
-  const wrapper = mount(StatCard, { props: { title: 'Test', value: 0, color: '#00965E' } })
-  expect(wrapper.find('.stat-card').attributes('style')).toContain('#00965E')
+  it('trend가 양수이면 trend--up 클래스가 적용된다', () => {
+    const wrapper = mount(StatCard, { props: { title: 'Test', value: 0, trend: 5 } })
+    expect(wrapper.find('.stat-card__trend').classes()).toContain('trend--up')  // ✅
+  })
+
+  it('color prop이 CSS 변수로 style에 적용된다', () => {
+    const wrapper = mount(StatCard, { props: { title: 'Test', value: 0, color: '#00965E' } })
+    expect(wrapper.find('.stat-card').attributes('style')).toContain('#00965E')  // ✅
+  })
 })
 ```
 
@@ -325,16 +362,22 @@ it('color prop이 CSS 변수로 style에 적용된다', () => {
 
 ```typescript
 // utils/__tests__/quality.test.ts
-it('90 이상이면 quality--high를 반환한다', () => {
-  expect(qualityClass(90)).toBe('quality--high')
-  expect(qualityClass(100)).toBe('quality--high')
-})
-it('70~89이면 quality--mid를 반환한다', () => {
-  expect(qualityClass(70)).toBe('quality--mid')
-  expect(qualityClass(89)).toBe('quality--mid')
-})
-it('70 미만이면 quality--low를 반환한다', () => {
-  expect(qualityClass(69)).toBe('quality--low')
+import { describe, it, expect } from 'vitest'
+import { qualityClass } from '../quality'
+
+describe('qualityClass', () => {
+  it('90 이상이면 quality--high를 반환한다', () => {
+    expect(qualityClass(90)).toBe('quality--high')   // ✅ 경계값
+    expect(qualityClass(100)).toBe('quality--high')  // ✅ 최댓값
+  })
+  it('70~89이면 quality--mid를 반환한다', () => {
+    expect(qualityClass(70)).toBe('quality--mid')    // ✅ 경계값
+    expect(qualityClass(89)).toBe('quality--mid')    // ✅ 상한 경계
+  })
+  it('70 미만이면 quality--low를 반환한다', () => {
+    expect(qualityClass(69)).toBe('quality--low')    // ✅ 경계값
+    expect(qualityClass(0)).toBe('quality--low')     // ✅ 최솟값
+  })
 })
 ```
 
@@ -342,14 +385,14 @@ it('70 미만이면 quality--low를 반환한다', () => {
 
 | # | 시나리오 | 셀렉터 | 검증 |
 |:-:|----------|--------|------|
-| 1 | Overview 기본 렌더링 | `.stat-card`, `.chart-card` | 6개 KPI 카드 + 차트 존재 |
-| 2 | PR 목록 페이지 이동 | `[data-testid="nav-pr-list"]` | `.pr-table` 렌더링 확인 |
+| 1 | Overview 기본 렌더링 | `.stat-card` × 6 | KPI 카드 수 정확히 6개 |
+| 2 | PR 목록 페이지 이동 | `a[href="/pull-requests"]` | `.pr-row` 렌더링 확인 |
 | 3 | PR 슬라이드 패널 오픈 | `.pr-row:first-child` | `.panel` `toBeVisible()` |
 | 4 | ESC 키로 패널 닫기 | `keyboard.press('Escape')` | `.panel` `not.toBeVisible()` |
 | 5 | 다크모드 토글 ON | `.theme-toggle` | `html[data-theme="dark"]` |
 | 6 | 다크모드 토글 OFF | `.theme-toggle` 재클릭 | `html[data-theme="light"]` |
-| 7 | 개발자 페이지 이동 | `[data-testid="nav-developers"]` | `.dev-card` 존재 확인 |
-| 8 | AI 인사이트 페이지 이동 | `[data-testid="nav-insights"]` | `.insight-card` 존재 확인 |
+| 7 | 개발자 페이지 이동 | `a[href="/developers"]` | `.dev-card` 존재 확인 |
+| 8 | AI 인사이트 페이지 이동 | `a[href="/insights"]` | `.insight-card` 존재 확인 |
 
 > E2E는 **GitHub Actions Ubuntu 환경**에서 `npx playwright install --with-deps chromium` 후 실행됩니다.
 > 결과 리포트(`playwright-report`)는 Actions Artifacts에 7일간 보관됩니다.
@@ -362,24 +405,26 @@ it('70 미만이면 quality--low를 반환한다', () => {
 
 [![CI](https://github.com/knh980109/DevLens/actions/workflows/ci.yml/badge.svg)](https://github.com/knh980109/DevLens/actions/workflows/ci.yml)
 
+**파이프라인 실행 단계:**
+
 ```
 push / PR → main 브랜치
 │
-├── ① unit-test                    (Ubuntu Latest)
-│   ├── npm ci
-│   ├── npm run test:coverage      → 30건 통과 / 핵심 모듈 100% 커버리지
-│   └── 📦 Artifact 업로드: coverage-report (보관 7일)
+├── ① Install & Unit Test          (Ubuntu Latest)
+│   ├── npm ci                     의존성 설치
+│   ├── npm run test:coverage      30건 단위 테스트 + 커버리지 측정
+│   └── 📦 coverage-report 아티팩트 업로드 (7일 보관)
 │
-├── ② build-frontend               (needs: unit-test)
-│   ├── npm run build              → TypeScript 컴파일 오류 없음 확인
-│   └── Vite 번들 생성 성공
+├── ② Build (needs: unit-test)
+│   ├── npm run build              TypeScript 컴파일 + Vite 번들링
+│   └── 빌드 성공 여부 확인
 │
-├── ③ e2e-test                     (needs: build-frontend)
-│   ├── npx playwright install --with-deps chromium
-│   ├── npm run test:e2e           → 8개 시나리오 실행
-│   └── 📦 Artifact 업로드: playwright-report (if: always(), 보관 7일)
+├── ③ E2E Test (needs: build)
+│   ├── playwright install chromium
+│   ├── npm run test:e2e           8개 시나리오 실행
+│   └── 📦 playwright-report 아티팩트 업로드 (항상, 7일 보관)
 │
-└── ④ build-backend                (병렬 실행)
+└── ④ Backend Build (병렬 실행)
     ├── dotnet restore
     └── dotnet build --configuration Release
 ```
@@ -395,7 +440,7 @@ push → main
     └── 🚀 https://knh980109.github.io/DevLens/  자동 배포
 ```
 
-**파이프라인 실행 이력 확인:** [GitHub Actions](https://github.com/knh980109/DevLens/actions)
+**파이프라인 실행 이력:** [GitHub Actions 보기 →](https://github.com/knh980109/DevLens/actions)
 
 ---
 
@@ -407,47 +452,67 @@ push → main
 |------|:----:|:--------:|:----:|:---------:|
 | **데스크탑** | 1280px 이상 | 3열 그리드 | 2열 그리드 | 전체 컬럼 |
 | **태블릿** | 768px~1279px | 2열 그리드 | 1열 스택 | 전체 컬럼 |
-| **모바일** | 768px 미만 | 1열 스택 | 1열 스택 | 가로 스크롤 |
+| **모바일** | 375px~767px | 1열 스택 | 1열 스택 | 가로 스크롤 |
 
-### 실제 구현 코드
+### 실제 화면 (라이브 데모에서 확인)
+
+| 데스크탑 (1280px+) | 태블릿 (768px) | 모바일 (375px) |
+|:------------------:|:--------------:|:--------------:|
+| 3열 KPI 카드 + 2열 차트 | 2열 KPI 카드 + 1열 차트 | 1열 스택 + 가로 스크롤 |
+| [라이브 데모 →](https://knh980109.github.io/DevLens/) | 브라우저 폭 768px로 확인 | 브라우저 DevTools 모바일 뷰 |
+
+### 반응형 구현 코드 (`OverviewView.vue`)
 
 ```scss
-// OverviewView.vue — stat-grid
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);   // 데스크탑: 3열
+  grid-template-columns: repeat(3, 1fr);   /* 데스크탑: 3열 */
 
   @media (max-width: 1280px) {
-    grid-template-columns: repeat(2, 1fr); // 태블릿: 2열
+    grid-template-columns: repeat(2, 1fr); /* 태블릿: 2열 */
   }
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;            // 모바일: 단일 컬럼
+    grid-template-columns: 1fr;            /* 모바일: 단일 컬럼 */
   }
 }
 
-// chart-grid (2열 → 1열)
 .chart-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr;            /* 모바일: 1열 스택 */
   }
 }
 
-// PR 목록 테이블 — 모바일 가로 스크롤
 .table-wrapper {
   @media (max-width: 768px) {
-    overflow-x: auto;
+    overflow-x: auto;                      /* 모바일: 가로 스크롤 */
   }
 }
 ```
 
 ---
 
-## 9. Demo 시나리오 (30초)
+## 9. 프로젝트 신뢰성 (Project Reliability)
 
-심사자가 라이브 데모([knh980109.github.io/DevLens](https://knh980109.github.io/DevLens/))에서 바로 확인할 수 있는 핵심 흐름입니다.
+DevLens는 데모 프로젝트이지만 **프로덕션 수준의 신뢰성 기준**을 적용합니다.
+
+| 항목 | 구현 내용 | 파일 |
+|------|-----------|------|
+| **TypeScript 전체 적용** | 모든 `.vue` 파일에 `lang="ts"`, `vite-env.d.ts` 모듈 선언, 파라미터 타입 명시 | 전체 소스 |
+| **중앙화 에러 처리** | `utils/errorHandler.ts` — 메시지 추출·로깅·사용자 메시지 분리, 8건 단위 테스트 | `utils/errorHandler.ts` |
+| **자동화 테스트** | Vitest 30건 단위 + Playwright E2E 8건 = 총 38건, 핵심 모듈 100% 커버리지 | `__tests__/`, `e2e/` |
+| **CI 게이트** | 단위 테스트 → 빌드 → E2E 순서 강제, 하나라도 실패 시 배포 차단 | `.github/workflows/ci.yml` |
+| **API fallback** | 백엔드 없이도 Mock JSON 자동 전환, 4개 뷰 전부 에러 배너 표시 — 빈 화면 없음 | `stores/dashboard.ts` |
+| **Swagger API 문서** | 4개 엔드포인트 XML 주석 + `[ProducesResponseType]` 자동 문서화 | `Controllers/DashboardController.cs` |
+| **불변 타입 안전성** | C# `class` 타입 + nullable reference types, TypeScript `interface` 공유 | `Models/`, `types/index.ts` |
+
+---
+
+## 10. Demo 시나리오 (30초)
+
+심사자가 [라이브 데모](https://knh980109.github.io/DevLens/)에서 바로 확인할 수 있는 핵심 흐름입니다.
 
 ```
 ① Overview 진입 (0~8초)
