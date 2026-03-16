@@ -49,3 +49,23 @@ cd frontend && npm run dev
 | 커밋 해시 | 메시지 |
 |-----------|--------|
 | `70bf706` | feat: DevLens AI Code Review Dashboard 초기 구현 |
+
+---
+
+## 💡 개발 중 발생한 이슈
+
+### 이슈: 백엔드 포트 불일치
+
+**문제 상황**
+
+`dotnet run` 직후 Vite proxy가 동작하지 않았습니다. `vite.config.ts`에 `http://localhost:5062`로 설정했는데 API 호출이 전부 실패했습니다.
+
+원인을 확인하니 `dotnet new webapi` 템플릿이 `launchSettings.json`에 랜덤 포트 **5098**을 할당했습니다.
+
+**시도**
+
+Vite proxy 포트를 5098로 맞춰 임시 해결을 시도했으나, 팀원 환경마다 포트가 달라질 수 있어 근본 해결이 필요하다고 판단했습니다.
+
+**해결**
+
+`backend/Properties/launchSettings.json`의 `applicationUrl`을 `http://localhost:5062`로 고정했습니다. 이후 프론트엔드 proxy와 정상 통신 확인 완료.
